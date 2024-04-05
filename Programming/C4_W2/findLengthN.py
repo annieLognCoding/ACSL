@@ -3,7 +3,6 @@ def readInput(L):
     return [arr[0], arr[1:]]
 
 def travel(n, tEdge, path, edges, paths):
-    
     if(n == 0):
         paths.append(path)
         return
@@ -16,7 +15,6 @@ def travel(n, tEdge, path, edges, paths):
         if(tEdge[1] == first and (second not in path)):
             #travel to the edge and explore all other paths
             travel(n-1, edge, path + second, edges, paths)
-    return
 
 def findLengthN(input):
     n, edges = readInput(input)

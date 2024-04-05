@@ -6,7 +6,7 @@ def readInput(L):
     return tuples
 
 def travel(start, tEdge, path, edges, tWeight, maxVal):
-    #look at all the edges and see if they are traversable
+    #look at all the other edges and see if they are traversable
     for i in range(0, len(edges)):
         edge = edges[i][0]
         weight = edges[i][1]
