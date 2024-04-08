@@ -1,0 +1,14 @@
+AB, 0.0648
+CA, 24.0000
+EB, 28.3495
+DE, 1.0971
+AA 
+AC 
+BA 
+BD 
+CB
+CE
+DC
+DA
+EC
+ED
