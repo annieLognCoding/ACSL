@@ -37,34 +37,39 @@ def rotate(move, curr_pos):
 def rotateRow(curr_pos, curr_row, rotateFaces, direction, rep):
     result = None
     cube_copy = copy.deepcopy(cube)
-    for i in rotateFaces:
-        for j in range(3):
-            # print("here", i, j, curr_row, rep + j)
-            if direction == "RR":
-                if(j - rep <= (curr_row + 1) * 3):
-                    shift = (j - rep) // 3
-                    new_face = (i - shift) % 4
-                    new_pos = (j - rep) % 3
+    face, (x, y) = curr_pos
+    if(face <= 3):
+        for i in rotateFaces:
+            for j in range(3):
+                # print("here", i, j, curr_row, rep + j)
+                if direction == "RR":
+                    if(j - rep <= (curr_row + 1) * 3):
+                        shift = (j - rep) // 3
+                        new_face = (i + shift) % 4
+                        new_pos = (j - rep) % 3
+                    else:
+                        new_face = i
+                        new_pos = j - rep
                 else:
-                    new_face = i
-                    new_pos = j - rep
-            else:
-                if(j + rep >= (curr_row + 1) * 3):
-                    shift = (j + rep) // 3
-                    new_face = (i + shift) % 4
-                    new_pos = (j + rep) % 3
-                else:
-                    new_face = i
-                    new_pos = j + rep
-            print(i, new_face, curr_row, new_pos)
-            if(curr_pos[0] == new_face and curr_pos[1][1] == new_pos):
-                print("hi")
-                result = (i, (curr_row, j))
-            cube[i][curr_row][j] = cube_copy[new_face][curr_row][new_pos]
+                    if(j + rep >= (curr_row + 1) * 3):
+                        shift = (j + rep) // 3
+                        new_face = (i + shift) % 4
+                        new_pos = (j + rep) % 3
+                    else:
+                        new_face = i
+                        new_pos = j + rep
+                if(curr_pos[0] == new_face and curr_pos[1][1] == new_pos):
+                    result = (i, (curr_row, j))
+                cube[i][curr_row][j] = cube_copy[new_face][curr_row][new_pos]
         print()
+    elif face == 4:
+        #0th row (4) --> 0th column (0) --> 2nd row (5) --> 2nd column (2)
+        #1st row (4) --> 1st column (0) --> 1st row (5) --> 1st column (2)
+        #2nd row (4) --> 2nd column (0) --> 0th row (5) --> 0th column (2)
+        return
     return result
 
-print(rotate("RC2", initial_pos))
+rotate("RR3", initial_pos)
 print(cube)
 
 
