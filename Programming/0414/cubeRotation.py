@@ -23,7 +23,7 @@ def makeCube(cube, input_color, pos):
     return initial_pos
 
 initial_pos = makeCube(cube, focus[0], int(focus[1]))
-
+print(cube)
 def rotate(move, curr_pos):
     face, (curr_row, curr_col) = curr_pos
     major, direction, rep = move[0], move[1], int(move[2])
@@ -101,12 +101,12 @@ def rotateMajor(rotateArray, direction, rep):
     return result
 
 
-curr_pos = initial_pos
+# curr_pos = initial_pos
 
-for move in moves:
-    curr_pos = rotate(move, curr_pos)
+# for move in moves:
+#     curr_pos = rotate(move, curr_pos)
 
-face = curr_pos[0]
-for row in cube[face]:
-    for square in row:
-        print(square, end = "")
+# face = curr_pos[0]
+# for row in cube[face]:
+#     for square in row:
+#         print(square, end = "")
