@@ -4,7 +4,6 @@ class node:
         self.key = key
         self.leftChild = left
         self.rightChild = right
-        self.parent = parent
         self.count = 1
 
     def hasLeftChild(self):
