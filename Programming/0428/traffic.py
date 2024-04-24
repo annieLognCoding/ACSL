@@ -51,57 +51,70 @@ def nextDiag(start, mid):
 
 
 def calcWeight(start, pathWay, end, count):
+    if(not start or count < 0): return False
     if(pathWay == "d"): weight = 1.4
     elif(pathWay == "n"): weight = 1
     else: weight = 0
 
-    if(start == end or count == 4):
+    if(start == end):
         return weight
     
-    (sX, sY), (eX, eY) = start, end
+    (sX, sY) = start
+    
+    nWeight, dWeight = None, None
+    nextX, nextY = None, None
 
-    print(f"{start}: {nextDiag(start, end)}")
-    nWeight, dWeight, next = None, None, None
-
-    if(sX > eX) and sY % 2 == 0:
-        next = (sX - 1, sY)
-    if(sX < eX) and sY % 2 == 1:
-        next = (sX + 1, sY)
-    if(sY > eY) and sX % 2 == 0:
-        next = (sX, sY - 1)
-    if(sY < eY) and sY % 2 == 1:
-        next = (sX, sY + 1)
-
-    if(next):
-        nWeight = calcWeight(next, "n", end, count + 1)
+    # optimize?
+    if sY % 2 == 0 and sX > 1:
+        nextX = (sX - 1, sY)
+    elif sY % 2 == 1 and sX < 6:
+        nextX = (sX + 1, sY)
+    if sX % 2 == 0 and sY > 1:
+        nextY = (sX, sY - 1)
+    elif sX % 2 == 1 and sY < 6:
+        nextY = (sX, sY + 1)
+    
+    xWeight = calcWeight(nextX, "n", end, count-1)
+    yWeight = calcWeight(nextY, "n", end, count-1)
+    
+    if(xWeight and yWeight):
+        nWeight = min(xWeight, yWeight)
+    elif(xWeight):
+        nWeight = xWeight
     else:
-        if sX % 2 == 0:
-            nextX = (sX - 1, sY)
-        else:
-            nextX = (sX + 1, sY)
-        if sY % 2 == 0:
-            nextY = (sX, sY - 1)
-        else:
-            nextY = (sX, sY + 1)
-        nWeight = min(calcWeight(nextX, "n", end, count + 1), calcWeight(nextY, "n", end, count + 1))
-
-
+        nWeight = yWeight
     
     diag = nextDiag(start, end)
-    if(diag):
-        dWeight = calcWeight(diag, "d", end, count + 1)
+
+    pWeight = None
+    dWeight = calcWeight(diag, "d", end, count-1)
+
     if(nWeight and dWeight):
         pWeight = min(nWeight, dWeight)
     elif (nWeight):
         pWeight = nWeight
     elif (dWeight):
         pWeight = dWeight
-    
+    else:
+        return False
+        
     return weight + pWeight
     
-
-print(calcWeight((2,1), "s", (2, 2), 0))
-
+start, end = (2, 5), (6, 3)
+count = abs(start[0] - end[0]) + abs(start[1] - end[1]) + 6
+print(calcWeight(start, "s", end, count))
+"""
+1. 1,1,2,1 1. 1
+ 2. 1,1,1,2 2. 1
+ 3. 2,1,2,2 3. 3
+ 4. 2,1,1,2 4. 4
+ 5. 4,1,2,2 5. 5
+ 6. 1,2,2,3 6. 1.4
+ 7. 2,2,5,5 7. 4.2
+ 8. 1,2,4,3 8. 3.4
+ 9. 5,5,4,3 9. 2.4
+ 10. 2,5,6,3 10. 4.8
+"""
 
 
 
