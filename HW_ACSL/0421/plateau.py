@@ -17,6 +17,7 @@ def moveStack(major, movesLeft, currPos, stackHeight, score, marks):
         
         #skip current position
         if(pos == currPos): continue 
+        
         num, color = int(comp[0]), comp[1]
         distance = dist(currPos, pos)
         
