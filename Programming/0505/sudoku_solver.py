@@ -15,18 +15,17 @@ class Solution(object):
                 print(i, j, (i//3 * 3+ j//3))
                 self.squares[(i//3 * 3 + j//3)].append(elem)
 
-    def solveSudoku(self, i, j, elem):
-        temp_row = self.board[i][j]
-        temp_col = self.cols[j][i]
-        temp_square = self.squares[(i//3)*3 + j//3][j]
-        self.board[i][j] = elem
-        self.cols[j][i] = elem
-        self.squares[(i//3 * 3 + j//3)] = elem
-        if(i == 8 and j == 8): return
+    def insertTile(self, i, j, elem):
+        if(not(elem in self.board[i] and elem in self.cols[j] and elem in self.squares[(i // 3)*3 +j//3])):
+            self.board[i][j] = elem
+            self.cols[j][i] = elem
+            self.squares[(i//3 * 3 + j//3)] = elem
+            return True
+        else:
+            return False
 
-    def rowOkay(self):
-        for row in (self.board):
-            if(row): return False
+    def solveSudoku(self):
+        pass
 
 
     
