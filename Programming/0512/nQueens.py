@@ -20,7 +20,7 @@ class Solution(object):
             return
 
         for j in range(n):
-            if(not (diagExists(board, i, j) or rowExists(board, i, j) or colExists(board, i, j))):
+            if(not (diagExists(board, i, j) or rowExists(board, i) or colExists(board, j))):
                 board.add((i, j))
                 self.solveNQueensRecur(board, i+1, n)
                 board.remove((i, j))
@@ -32,19 +32,19 @@ def diagExists(board, i, j):
                 return True
         return False
     
-def rowExists(board, i, j):
+def rowExists(board, i):
     for pos in board:
-        (row, col) = pos
+        row = pos[0]
         if i == row:
             return True
     return False
 
-def colExists(board, i, j):
+def colExists(board, j):
     for pos in board:
-        (row, col) = pos
+        col = pos[1]
         if j == col:
             return True
     return False
 
 s = Solution()
-print(len(s.solveNQueens(9)))
+print(len(s.solveNQueens(3)))
