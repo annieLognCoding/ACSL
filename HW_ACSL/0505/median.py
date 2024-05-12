@@ -15,19 +15,23 @@ class Solution(object):
     
     def findMedianHelper(self, i, j, nums1, nums2):
         step = i // 2
-        if(step == 0):
+        if step == 0:
             step = 1 
         
-        # Edge case handling
-        if(i == 0 or i == len(nums1) - 1 or j == 0 or j == len(nums2) - 1):
-            if(i == 0 and j == len(nums2) - 1 or i == len(nums1) - 1 and j == 0):
-                return (nums2[j] + nums1[i]) / 2 if (len(nums1) + len(nums2)) % 2 == 0 else min(nums2[j], nums1[i])
-            elif(i == 0):
-                if(nums1[i] > nums2[j + 1]):
-                    return (nums2[j] + nums2[j - 1]) / 2 if (len(nums1) + len(nums2)) % 2 == 0 else nums2[j - 1]
-            elif(j == 0 or j == len(nums2) - 1):
-                return (nums1[i] + nums1[i - 1]) / 2 if (len(nums1) + len(nums2)) % 2 == 0 else nums1[i - 1]
-
+        if i == 0 or i == len(nums1) - 1 or j == 0 or j == len(nums2) - 1:
+            if i == len(nums1) - 1 and j > 0 and nums1[i] >= nums2[j-1]:
+                median = (nums1[i] + nums2[j]) / 2 if (len(nums1) + len(nums2)) % 2 == 0 else nums2[j]
+                return median
+            elif j == len(nums2) - 1 and i > 0 and nums2[j] >= nums1[i-1]:
+                median = (nums2[j] + nums1[i]) / 2 if (len(nums1) + len(nums2)) % 2 == 0 else nums1[i]
+                return median
+            elif i == 0 and j < len(nums2) - 1 and nums1[i] <= nums2[j+1]:
+                median = (nums1[i] + nums2[j]) / 2 if (len(nums1) + len(nums2)) % 2 == 0 else nums2[j]
+                return median
+            elif j == 0 and i < len(nums1) - 1 and nums2[j] <= nums1[i+1]:
+                median = (nums2[j] + nums1[i]) / 2 if (len(nums1) + len(nums2)) % 2 == 0 else nums1[i]
+                return median
+            return min(nums1[i], nums2[j]) if (len(nums1) + len(nums2)) % 2 != 0 else (nums1[i] + nums2[j]) / 2
         target1 = nums1[i]
         target2 = nums2[j]
         ans = min(target1, target2)
@@ -53,8 +57,8 @@ class Solution(object):
         return (arr[n // 2 - 1] + arr[n // 2]) / 2.0 if n % 2 == 0 else arr[n // 2]
 
 # Specific arrays to test
-arr1 = [10, 20, 30]
-arr2 = [15, 25, 35, 45, 55]
+arr1 = [4, 5]
+arr2 = [1, 2, 3]
 
 # Create a solution instance and test
 solution = Solution()
