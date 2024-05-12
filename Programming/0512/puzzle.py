@@ -69,4 +69,3 @@ def moveMajor(major, pos, ind, table):
 (table, moves) = readInput("5 13 14 19 17 3 8")
 print(move(table, moves))
 print(table)
-
