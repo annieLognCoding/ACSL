@@ -1,13 +1,20 @@
 grid = []
 groups = []
+initial_pos = []
+empty = []
+
 def readInput(line):
-    global grid
+    global grid, initial_pos
 
     inputs = line.split(",")
     r, c = int(inputs[0]), int(inputs[1])
     for i in range(r):
-        grid.append([0] * c)    
-    config = inputs[2].strip()
+        grid.append([])
+        for j in range(c):
+            grid[i].append(0)
+            empty.append((i, j))
+
+    config = inputs[2].replace(' ', '')
     n = int(inputs[3])
     for i in range(1, n+1):
         pos_val = inputs[3 + i].strip()
@@ -15,6 +22,8 @@ def readInput(line):
         col = int(pos_val[1]) - 1
         val = int(pos_val[2])
         grid[row][col] = val
+        empty.remove((row, col))
+
     return config
         
 
@@ -57,9 +66,7 @@ def makeGroup(tile, back, currPos, rows, group, filled):
     
     border = hexToBin(tile)
     avail = {}
-    avail["top"], avail["right"], avail["bottom"], avail["left"] = 1 - int(border[0]), 1 - int(border[1]), 1 - int(border[2]), 1 - int(border[3])
-    
-    print(currPos, tile, back, avail)
+    avail["top"], avail["right"], avail["bottom"], avail["left"] = 1 - int(border[0]), 1 - int(border[1]), 1 - int(border[2]), 1 - int(border[3])    
 
     if(back in avail and not avail[back]):
         return group
@@ -96,9 +103,7 @@ def makeGroups(rows):
     filled = {}
     for i in range(r):
         for j in range(c):
-            filled[(i, j)] = 0
-    
-    print(filled)
+            filled[(i, j)] = 0    
     for i in range(r):
         for j in range(c):
             if not filled[(i, j)]:
@@ -106,11 +111,61 @@ def makeGroups(rows):
                 tile = rows[i][j]
                 groups.append(makeGroup(tile, "", (i, j), rows, group, filled))    
 
+def valid(pos, num, group):
+    (i, j) = pos
+    if(i > 0 and grid[i - 1][j] == num):
+        return False
+    if(i < len(grid) - 1 and grid[i + 1][j] == num):
+        return False
+    if(j > 0 and grid[i][j - 1] == num):
+        return False
+    if(j < len(grid[0]) - 1 and grid[i][j + 1] == num):
+        return False
+    if(i > 0 and j > 0 and grid[i - 1][j - 1] == num):
+        return False
+    if(i > 0 and j < len(grid[0]) - 1 and grid[i - 1][j + 1] == num):
+        return False
+    if(i > len(grid) - 1 and j > 0 and grid[i + 1][j - 1] == num):
+        return False
+    if(i > len(grid) - 1 and j > len(grid[0]) - 1 and grid[i + 1][j + 1] == num):
+        return False
+    
+    for other_pos in group:
+        (r, c) = other_pos
+        if(grid[r][c] == num):
+            return False
+
+    return True
+
+def solve():
+    if not empty:
+        return True
+        
+    (i, j) = empty[-1]
+    group = []
+    for g in groups:
+        if (i, j) in g:
+            group = g
+            break
+    
+    for num in range(1, len(group) + 1):
+        if valid((i, j), num, group):
+            grid[i][j] = num
+            empty.pop()
+            if solve():
+                return True
+            empty.append((i, j))
+            grid[i][j] = 0
+    return False
 
 
-config = readInput('3, 5, 32EB69CB6DFBE9E, 2, 114, 151')
+                    
+
+config = readInput('6, 5, 36B269479C7D9679A65536DD598EBC, 9, 112, 134, 153, 323, 411, 432, 455, 614, 631')
 print(grid)
 rows = reorder(config)
 print(rows)
 makeGroups(rows)
 print(groups)
+solve()
+print(grid)
